@@ -5,7 +5,6 @@ CREATE TABLE Logistics (
 NumPatient NUMBER(10) NOT NULL,
 NumDoctor NUMBER(10) NOT NULL,
 NumNurse NUMBER(10) NOT NULL,
-NumStaff NUMBER(10) NOT NULL,
 NumBeds NUMBER(10) NOT NULL ,
 LogisticsDate DATE NOT NULL,
 PRIMARY KEY(LogisticsDate)
@@ -49,7 +48,6 @@ Doctor table
 */
 CREATE TABLE doctors (
 Specialization VARCHAR2(20) NOT NULL,
-EmployeeType VARCHAR2(20) DEFAULT 'doctor',
 EmployeeID Number(10),
 FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
 );
@@ -58,8 +56,8 @@ FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
 Nurses table
 */
 CREATE TABLE nurses (
-EmployeeType VARCHAR2(20) DEFAULT 'nurse',
 EmployeeID NUMBER(10),
+Specialization VARCHAR2(20) NOT NULL,
 FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
 );
 /*
@@ -68,15 +66,14 @@ Law Enforcement table
 CREATE TABLE Law_Enforcement (
 Profession VARCHAR2(20) NOT NULL,
 EmployeeID Number(10),
-EmployeeType VARCHAR2(20) DEFAULT 'law enforcement',
 FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
 );
 /*
 Operations Staff table
 */
 CREATE TABLE Operations_Staff (
+Job_title VARCHAR2(20) NOT NULL,
 EmployeeID NUMBER(10),
-EmployeeType VARCHAR2(20) DEFAULT 'operations staff',
 FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID)
 );
 /*
@@ -92,20 +89,28 @@ Gender CHAR NOT NULL,
 SIN NUMBER(5) NOT NULL,
 Health_CN NUMBER(14,0) NOT NULL,
 Symptoms VARCHAR2(200)NOT NULL,
-LogisticsDate DATE,
-Admitted CHAR DEFAULT 'Y',
-PRIMARY KEY (PatientID),
-FOREIGN KEY (LogisticsDate) REFERENCES Logistics(LogisticsDate)
+PRIMARY KEY (PatientID)
 );
+
+/*
+DateAdmitted
+*/
+CREATE TABLE Date_Admitted (
+Date_released DATE,
+LogisticsDate DATE NOT NULL,
+PatientID NUMBER(10)NOT NULL,
+FOREIGN KEY (LogisticsDate) REFERENCES Logistics(LogisticsDate),
+FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
+);
+
 /*
 Bed
 */
 CREATE TABLE Bed(
 Bed_ID NUMBER(5) ,
-LogisticsDate DATE,
 PatientID NUMBER(10) NOT NULL,
+Occupied CHAR DEFAULT 'N',
 PRIMARY KEY (Bed_ID),
-FOREIGN KEY (LogisticsDate) REFERENCES Logistics(LogisticsDate),
 FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
 );
 
@@ -124,17 +129,18 @@ Emergency Contact
 */
 CREATE TABLE Emergency_Contact(
 FullName VARCHAR2(200) NOT NULL,
-Relation VARCHAR2(200) PRIMARY KEY,
+Relation VARCHAR2(200) NOT NULL,
 Tel_Number NUMBER(10) NOT NULL,
 Address VARCHAR2 (50) NOT NULL,
 PatientID NUMBER(10),
 FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
 );
+
 /*
 Medicine Prescription
 */
 CREATE TABLE Medicine_Prescription(
-Medicine_ID NUMBER (20,0) PRIMARY KEY,
+Medicine_ID NUMBER (20,0) NOT NULL,
 PatientID NUMBER(10) NOT NULL,
 Dosage VARCHAR2(20)NOT NULL,
 Consumption_Cycle VARCHAR2 (100) NOT NULL,
@@ -149,6 +155,7 @@ DROP TABLE account CASCADE CONSTRAINTS;
 DROP TABLE schedule CASCADE CONSTRAINTS;
 DROP TABLE doctors CASCADE CONSTRAINTS;
 DROP TABLE nurses CASCADE CONSTRAINTS;
+DROP TABLE Date_Admitted CASCADE CONSTRAINTS;
 DROP TABLE Law_Enforcement CASCADE CONSTRAINTS; 
 DROP TABLE Operations_Staff CASCADE CONSTRAINTS;
 DROP TABLE Logistics CASCADE CONSTRAINTS;
