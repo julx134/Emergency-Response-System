@@ -1,13 +1,13 @@
 # EmergencyResponse Record Management System Database
 
 Menu
-![](diagrams/main.png)
+![](diagrams/main.JPG)
 
 Query Example 1
-![](diagrams/query1.png)
+![](diagrams/query1.JPG)
 
 Query Example 2
-![](diagrams/query2.png)
+![](diagrams/query2.JPG)
 
 Diagrams for normalized tables
 ![](diagrams/3NF.JPG)
